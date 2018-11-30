@@ -1,0 +1,106 @@
+
+import tkinter as tk
+import numpy as np
+import matplotlib.pyplot as plt
+
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
+class Interface:
+    
+    def __init__ (self):
+    
+        self.montar()
+        self.rodar()
+    
+    def montar(self):
+
+        janela=tk.Tk() #cria a janela
+
+        janela.geometry("700x275")# tamanho da janela em pixels
+        janela.title("Cotaçao Dolar") #nome da janela
+        
+        fr_moeda = tk.Frame(janela)#cria um frame com as opcoes de moeda e data
+        fr_moeda.pack(side='left')# compacta ele a esquerda
+        
+        fr_md = tk.Frame(fr_moeda)#cria um frame dentro do outro, onde estara a escolha da moeda
+        fr_md.pack() #compacta o frame
+        
+        mod= tk.Label(fr_md,text='Moeda')#frame onde esta escrito moeda
+        mod.pack()#compact frame
+        
+        
+        fr_esc = tk.Frame(fr_moeda) #frame para as opçoes de moedas
+        fr_esc.pack() #compac frame
+        
+        cota=tk.StringVar()# transforma o botao em uma variavel string
+        
+        opções = ['Dolar','Real','Euro'] #possibilidades de moeda
+        
+        esc= tk.OptionMenu(fr_esc,cota,*opções) #cria as opcoes em cascata
+        esc.pack(side='left')# compacta a esquerda
+
+        cota2=tk.StringVar()# transforma o botao em uma variavel string
+        
+        esc2= tk.OptionMenu(fr_esc,cota2,*opções)#cria as opcoes em cascata
+        esc2.pack(side='right')#compacta a direita
+        
+        seta=tk.Label(fr_esc,text='--->') #coloca uma seta entre as escolhas
+        seta.pack(side='left') #compacta a esquerda
+        
+        fr_esc2= tk.Frame(fr_moeda)#cria um frame dentro do frame moeda para os valores
+        fr_esc2.pack()#compct
+        
+        real=tk.Entry(fr_esc2)#caixa de texto, primeira moeda
+        real.pack(side='left')#compacta a esquerda
+        
+        seta=tk.Label(fr_esc2,text='--->') #coloca uma seta entre as escolhas
+        seta.pack(side='left') #compacta a esquerda
+        
+        dol = tk.Entry(fr_esc2)# segunda opçao de moeda
+        dol.pack(side='left')#compacta
+        
+
+        fr_data = tk.Frame(fr_moeda) #cria um frame dentro do frame moesda para colocar a data desejada
+        fr_data.pack()
+        
+        doa = tk.Label(fr_data,text='Data:')#escrito antes da caixa de texto
+        doa.pack(side='left')#encaixa na janela
+
+        ano = tk.Entry(fr_data)#coloca uma caixa de texto
+        ano.pack(side='left')#coloca na janela
+
+        calc = tk.Button(fr_data,text = "calcular",bg='pink',fg='black',relief='groove' )#cria um botao
+        calc.pack(side='left')#coloca o botao 
+        
+        def f(x): #define uma funçao qualquer para montar o grafico
+            y = 20. - x
+            z = (x + x**.5) * ( y + y**.5) - 155.
+            return z
+
+        x = np.linspace(0,20,101)#cria o x do grafico
+        y = f(x) #faz o y do grafico em funçao de f
+        
+        grf= plt.figure(figsize=(5,3)) #cria o grafico
+        plt.plot(x,y,color='b')
+        plt.title('Cotaçao Dolar')# nomeia o grafico
+        plt.axhline(y=0, color='k')
+        plt.show()#eibe o grafico
+        
+        grf_fr = tk.Frame(janela) # cria um frame para o grafico
+        grf_fr.pack() #implementa esse frrame
+
+        canvas = FigureCanvasTkAgg(grf, master= grf_fr) #desenha o grafico no frame
+        canvas.get_tk_widget().pack()
+        
+        w = Scale(grf_fr, from_=1990, to=2030, orient=HORIZONTAL) # cria a medida de escala
+        w.pack()
+
+        
+        self.janela=janela
+
+    def rodar(self):
+    
+        self.janela.mainloop() #abre a janela
+
+
+interf=Interface()
